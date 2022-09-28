@@ -1,13 +1,13 @@
 import { useSession, signIn } from "next-auth/react";
 import { BsGithub, BsGoogle, BsDiscord } from "react-icons/bs";
 import { useRouter } from "next/router";
+import { motion } from "framer-motion";
 import cn from "classnames";
 
 const Login = () => {
   const { data: session, status } = useSession();
   const user = session?.user;
   const { push } = useRouter();
-  console.log(user);
 
   const providers = [
     {
@@ -23,6 +23,19 @@ const Login = () => {
       Icon: BsDiscord,
     },
   ];
+
+  const icon = {
+    hidden: {
+      opacity: 0,
+      pathLength: 0,
+      fill: "rgba(255, 255, 255, 0)",
+    },
+    visible: {
+      opacity: 1,
+      pathLength: 1,
+      fill: "#d1d5db",
+    },
+  };
 
   const handleOAuthSignIn = (provider: string) => () => signIn(provider);
 
@@ -40,7 +53,40 @@ const Login = () => {
   return (
     <>
       <div className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="w-full flex flex-col justify-center items-center">
+        <motion.svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 100 100"
+          className="h-56 mb-10 overflow-visible stroke-black stroke-2 "
+        >
+          <motion.path
+            d="M0 100V0l50 50 50-50v100L75 75l-25 25-25-25z"
+            variants={icon}
+            initial="hidden"
+            animate="visible"
+            transition={{
+              default: { duration: 2, ease: "easeInOut" },
+              fill: { duration: 2, ease: [1, 0, 0.8, 1] },
+            }}
+          />
+        </motion.svg>
+        <motion.div 
+          className="w-full flex flex-col justify-center items-center"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {
+              scale: .8, 
+              opacity: 0
+            },
+            visible: {
+              scale: 1,
+              opacity: 1,
+              transition: {
+                delay: 1
+              }
+            }
+          }}
+        >
           {providers.map(({ service, Icon }, index) => (
             <button
               key={index}
@@ -54,7 +100,7 @@ const Login = () => {
               Sign in with {service}
             </button>
           ))}
-        </div>
+        </motion.div>
       </div>
     </>
   );
