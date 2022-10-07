@@ -1,6 +1,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 type Inputs = {
   name: string;
@@ -15,6 +16,8 @@ const Profile = () => {
   const { data: session } = useSession();
   const user = session?.user
 
+  const { push } = useRouter()
+
   const {
     register,
     handleSubmit,
@@ -23,8 +26,9 @@ const Profile = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-    // TODO: call mutation method
     await mutateAsync(data);
+    // TODO: push to waiting room
+    push("/room")
   };
 
   return (
