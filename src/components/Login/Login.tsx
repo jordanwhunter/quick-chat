@@ -45,7 +45,7 @@ const Login = () => {
     }, 1000);
     return (
       <div className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        <h2>{`You're already logged in as ${user?.email}`}</h2>
+        <h2 className="text-white">{`You're already logged in as ${user?.email}`}</h2>
       </div>
     );
   }
