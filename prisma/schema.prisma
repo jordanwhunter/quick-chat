@@ -68,6 +68,7 @@ model Profile {
     id          String    @id @default(cuid())
     name        String
     contactInfo String
+    status      String    @default ("Waiting")
     userId      String    @unique   
 
     user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade) 
