@@ -8,10 +8,7 @@ export const userRouter = createRouter()
       contactInfo: z.string(),
       userId: z.string(),
     }),
-    // .nullish(),
     async resolve({ input, ctx }) {
-      console.log(input);
-
       const profileInfo = await ctx.prisma.profile.create({
         data: {
           name: input?.name,
@@ -29,9 +26,25 @@ export const userRouter = createRouter()
     async resolve({ input, ctx }) {
       const profile = await ctx.prisma.profile.findUnique({
         where: {
-          userId: input?.userId
-        }
-      })
-      return { success: true, profile: profile}
+          userId: input?.userId,
+        },
+      });
+      return { success: true, profile: profile };
+    },
+  })
+  .query("matchProfile", {
+    input: z.object({
+      userId: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      const match = await ctx.prisma.profile.findFirst({
+        where: {
+          status: "Waiting",
+          NOT: {
+            userId: input?.userId,
+          },
+        },
+      });
+      return { success: true, matchedProfile: match };
     },
   });
