@@ -27,7 +27,6 @@ const Profile = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     await mutateAsync(data);
-    // TODO: push to waiting room
     push("/room")
   };
 
